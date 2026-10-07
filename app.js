@@ -325,6 +325,28 @@ const CAREERS = Array.isArray(T.careers) ? T.careers : [];
 
 /* ---------- overview ---------- */
 const MODE_NAMES = { balanced: 'practice', random: 'practice · random', quiz: 'quiz', drill: 'drills', endless: 'endless' };
+/* ---------- official AVIXA duty weights (percent of each exam) ----------
+   Source: the exam content outline PDFs in data/docs/. ANP has no questions
+   in the bank yet, so every ANP duty reports "No data yet". */
+const DUTY_WEIGHTS = {
+  'CTS':   { A: 35, B: 30, C: 15, D: 20 },
+  'CTS-D': { A: 20, B: 28, C: 38, D: 14 },
+  'CTS-I': { A: 17, B: 12, C: 12, D: 39, E: 12, F: 8 },
+  'ANP':   { A: 16, B: 19, C: 15, D: 27, E: 13, F: 10 }
+};
+const DUTY_NAMES = {
+  'CTS': { A: 'Creating AV Solutions', B: 'Implementing AV Solutions',
+    C: 'Supporting AV System Operation', D: 'Servicing AV Solutions' },
+  'CTS-D': { A: 'Conduct a Needs Assessment', B: 'Coordinate with Other Professionals',
+    C: 'Develop and Document AV Designs', D: 'Deploy AV Designs' },
+  'CTS-I': { A: 'Implement Pre-Installation Activities', B: 'Practice Ongoing Project Responsibilities',
+    C: 'Conduct Site Rough-In/First-Fix', D: 'Install AV Systems',
+    E: 'Perform AV Systems Closeout', F: 'Conduct Post Project Activities' },
+  'ANP': { A: 'Conduct a Needs Analysis', B: 'Design Hardware Network Topology',
+    C: 'Design Software Network Topology', D: 'Perform System Deployment',
+    E: 'Verify System Performance', F: 'Conduct Project Closeout' }
+};
+
 (function overview() {
   const parts = MULTI ? TRACKS.map(t => `${countForTrack(t.id)} ${t.label}`) : [`${BANK.length} questions`];
   if (DECK.length) parts.push(`${DECK.length} cards`);
@@ -384,28 +406,6 @@ function renderHistory() {
     `<strong class="${h.score >= m ? 'pass' : 'fail'}">${+h.score || 0}%</strong></div>`
   ).join('');
 }
-
-/* ---------- official AVIXA duty weights (percent of each exam) ----------
-   Source: the exam content outline PDFs in data/docs/. ANP has no questions
-   in the bank yet, so every ANP duty reports "No data yet". */
-const DUTY_WEIGHTS = {
-  'CTS':   { A: 35, B: 30, C: 15, D: 20 },
-  'CTS-D': { A: 20, B: 28, C: 38, D: 14 },
-  'CTS-I': { A: 17, B: 12, C: 12, D: 39, E: 12, F: 8 },
-  'ANP':   { A: 16, B: 19, C: 15, D: 27, E: 13, F: 10 }
-};
-const DUTY_NAMES = {
-  'CTS': { A: 'Creating AV Solutions', B: 'Implementing AV Solutions',
-    C: 'Supporting AV System Operation', D: 'Servicing AV Solutions' },
-  'CTS-D': { A: 'Conduct a Needs Assessment', B: 'Coordinate with Other Professionals',
-    C: 'Develop and Document AV Designs', D: 'Deploy AV Designs' },
-  'CTS-I': { A: 'Implement Pre-Installation Activities', B: 'Practice Ongoing Project Responsibilities',
-    C: 'Conduct Site Rough-In/First-Fix', D: 'Install AV Systems',
-    E: 'Perform AV Systems Closeout', F: 'Conduct Post Project Activities' },
-  'ANP': { A: 'Conduct a Needs Analysis', B: 'Design Hardware Network Topology',
-    C: 'Design Software Network Topology', D: 'Perform System Deployment',
-    E: 'Verify System Performance', F: 'Conduct Project Closeout' }
-};
 
 /* ---------- exam readiness ----------
    Per-domain rows: practice performance (pooled correct/answered across

@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented here.
 
+## [Unreleased] – AVIXA hub preview
+
+### Added
+
+**AVIXA certification hub (preview)**
+- 138 new questions (530 total: 272 CTS / 134 CTS-D / 124 CTS-I), filling the blueprint gaps: CTS Duties B/C/D, CTS-D needs assessment, CTS-I ongoing-responsibilities/post-project
+- Every question tagged to its official AVIXA exam duty/task
+- Exam Readiness now weights scores by official exam duty percentages, with a per-duty breakdown
+- Document Library tab: 12 official AVIXA PDFs (handbooks, exam outlines, CTS-D formula sheet, fee schedule, code of ethics, RU chart), cached for offline
+- Certification Roadmap tab: CTS → CTS-D → CTS-I → ANP in prerequisite order, with persistent checklists, fees and exam formats
+
+### Fixed
+
+- Moved the official duty-weight tables above the overview initializer: they were declared after first use, which threw a temporal-dead-zone ReferenceError at load and silently disabled the Guides, Cards, Quiz, Practice, Drills, Endless, Library and Roadmap builders
+
 ## [6.1] – 2026-10-02
 
 ### Added
