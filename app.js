@@ -161,6 +161,15 @@ function domainBar(domain, correct, total) {
   return `<div class="dbar"><div class="dlbl"><span>${esc(domain)}</span><span>${correct}/${total} · ${pct}%</span></div>` +
     `<div class="dtrack"><div class="dfill" style="width:${pct}%;background:${barColor(pct)}"></div></div></div>`;
 }
+/* Result bars that match the home-page readiness meters: same band colors
+   (readyColor) and band labels (readyBand). Used for practice-test results. */
+function readyBar(label, correct, total) {
+  const pct = total ? Math.round(100 * correct / total) : 0;
+  const b = readyBand(pct);
+  return `<div class="dbar"><div class="dlbl"><span>${esc(label)}</span>` +
+    `<span class="${b.cls}">${pct}% · ${b.label}</span></div>` +
+    `<div class="dtrack"><div class="dfill" style="width:${pct}%;background:${readyColor(pct)}"></div></div></div>`;
+}
 const byWorst = (a, b) => (a[1].c / a[1].t) - (b[1].c / b[1].t);
 const EXAM = T.exam || {};
 const DISCLAIMER = EXAM.disclaimer || 'Treat this as a practice benchmark, not a prediction.';
@@ -1078,15 +1087,23 @@ const PTest = (function () {
     $('test-run').style.display = 'none';
     $('test-results').style.display = '';
     const sc = $('tr-score');
+    const sb = readyBand(pct);
     sc.textContent = pct + '%';
-    sc.className = 'big-score ' + (pct >= t.pass ? 'pass' : 'fail');
+    sc.className = 'big-score ' + sb.cls;
     const verdict = $('tr-verdict');
     if (pct >= t.hi) { verdict.textContent = 'Excellent — exam ready.'; verdict.className = 'verdict pass'; }
     else if (pct >= t.pass) { verdict.textContent = 'Likely pass — keep polishing weak domains.'; verdict.className = 'verdict pass'; }
     else { verdict.textContent = 'Below the pass heuristic — more study needed.'; verdict.className = 'verdict fail'; }
     $('tr-note').textContent = (expired ? 'Time expired — test auto-graded. ' : '') +
       `Pass heuristic: ${t.pass}%. ${DISCLAIMER}`;
-    $('tr-domains').innerHTML = Object.entries(byDom).sort(byWorst).map(([d, v]) => domainBar(d, v.c, v.t)).join('');
+    const dutyNames = (meta.cert && DUTY_NAMES[meta.cert]) || {};
+    const dutyLabel = d => dutyNames[d] ? `Duty ${d}: ${dutyNames[d]}` : `Duty ${d}`;
+    $('tr-domains').innerHTML =
+      Object.entries(byDom).sort(byWorst).map(([d, v]) => readyBar(d, v.c, v.t)).join('') +
+      (Object.keys(byDuty).length
+        ? `<h3 class="duty-h">Duty breakdown, by official exam weight</h3>` +
+          Object.entries(byDuty).sort(byWorst).map(([d, v]) => readyBar(dutyLabel(d), v.c, v.t)).join('')
+        : '');
     $('tr-review-list').style.display = 'none';
     $('tr-review-list').innerHTML = qs.map((q, idx) => reviewItem(q, answers[idx])).join('');
     releaseFocus();
