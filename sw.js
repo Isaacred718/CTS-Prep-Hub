@@ -29,6 +29,7 @@ var ASSETS = [
   './data/guides.js',
   './data/drills.js',
   './data/forge.js',
+  './data/ctsd-challenges.js',
   // Document library: official AVIXA PDFs, cached so they open offline.
   './data/docs/cts_handbook_august_2026.pdf',
   './data/docs/cts_exam_content_outline_2024.pdf',

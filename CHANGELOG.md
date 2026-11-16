@@ -2,6 +2,25 @@
 
 All notable changes to this project are documented here.
 
+## [6.2] – 2026-11-16
+
+### Added
+
+**CTS-D design challenges** (`data/ctsd-challenges.js`)
+- 155 new CTS-D questions weighted to the 11/13/2023 exam outline: Duty A 28, Duty B 49, Duty C 54, Duty D 24, covering all 17 tasks. CTS-D bank is now 289 (685 questions in total)
+- 16 multi-step CTS-D scenario drills (projector sizing, DISCAS, loudspeaker layouts, heat and power, PAG/NAG, conduit, AV-over-IP bandwidth, multicast, HDCP, A/V sync, verification)
+- 16 CTS-D formula-sheet generators for Endless mode: projector lumens, ceiling coverage and spacing, constant-voltage amplifier, amplifier and equipment heat, conduit fill, jam ratio, EPR, camera image size, data rate, task light, parallel impedance, branch circuits, mount loads and BDM viewing distance
+- Every new item has a difficulty (1–5) and a study reference to the CTS-D Exam Guide (2nd ed.) chapter and section or the 2024 formula sheet, shown under the explanation in quiz, review, Endless and drills
+- Drills tab: certification picker (CTS, CTS-D or all), following the global track setting
+
+### Fixed
+
+- 70 V amplifier sizing question now uses the formula sheet's 1.5 headroom factor (135 W, not 108 W)
+- Heat-load questions use the formula sheet's 3.4 factor (8,500 BTU/hr for 2,500 W)
+- 4K60 data-rate question: corrected the explanation and answer to the formula-sheet result (about 15 Gbps)
+- CTS-D contrast generator now measures luminance in cd/m² instead of lux
+- CTS-D viewing-distance generator now names the 4-6-8 rule of thumb and points to DISCAS for the exam
+
 ## [Unreleased] – AVIXA hub preview
 
 ### Added

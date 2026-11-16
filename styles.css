@@ -164,6 +164,7 @@ nav.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2p
 .explain strong{color:var(--accent)}
 .explain.ok{border-left-color:var(--green)}
 .explain.no{border-left-color:var(--red)}
+.ref-line{margin-top:8px;font-style:italic}
 .drill-scenario{
   background:var(--sunk);border:1px solid var(--line);border-radius:10px;
   padding:12px 14px;margin:14px 0;font-size:.9rem;line-height:1.5;
