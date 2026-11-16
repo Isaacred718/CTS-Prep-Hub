@@ -13,6 +13,9 @@ const BANK = typeof QUESTIONS !== 'undefined' ? QUESTIONS : [];
 const DECK = typeof CARDS !== 'undefined' ? CARDS : [];
 const GUIDE_LIST = typeof GUIDES !== 'undefined' ? GUIDES : [];
 const DRILL_LIST = typeof DRILLS !== 'undefined' ? DRILLS : [];
+// Optional study pointer on a question or drill (q.ref): the exam-guide
+// chapter/section it draws on, shown under the explanation.
+const refLine = q => (q && q.ref) ? `<div class="ref-line small muted">Study: ${esc(q.ref)}</div>` : '';
 const HAS_FORGE = typeof FORGE !== 'undefined' && FORGE.generators && FORGE.generators.length > 0;
 
 /* ---------- helpers ---------- */
@@ -821,7 +824,7 @@ function reviewItem(q, picked) {
   const your = picked == null ? '<em>unanswered</em>' : esc(q.options[picked]);
   return `<div class="review-item"><div class="rq">${mark} · ${esc(q.q)}</div>` +
     `<div class="ra">Your answer: <strong>${your}</strong><br>Correct answer: <strong class="pass">${esc(q.options[q.correct])}</strong></div>` +
-    `<div class="re">${esc(q.explanation)}</div></div>`;
+    `<div class="re">${esc(q.explanation)}${refLine(q)}</div></div>`;
 }
 function tally(items, okAt, keyOf) {
   const by = {};
@@ -895,7 +898,7 @@ const Quiz = (function () {
     markAnswered($('quiz-opts'), q.correct, oi);
     Sound.play(ok ? 'ok' : 'no');
     const ex = $('quiz-explain');
-    ex.innerHTML = `<div class="explain"><strong>${ok ? 'Correct.' : 'Not quite.'}</strong> ${esc(q.explanation)}</div>`;
+    ex.innerHTML = `<div class="explain"><strong>${ok ? 'Correct.' : 'Not quite.'}</strong> ${esc(q.explanation)}${refLine(q)}</div>`;
     ex.style.display = '';
     $('quiz-next').style.display = '';
     $('quiz-next').textContent = i + 1 === total ? 'See results →' : 'Next →';
@@ -1135,8 +1138,21 @@ const PTest = (function () {
 const Drills = (function () {
   let qs = [], orders = [], i = 0, answers = [];
   if (!DRILL_LIST.length) return {};
-  $('drill-count').textContent = DRILL_LIST.length;
   $('drills-intro').textContent = fill(COPY.drillsIntro);
+  // Certification filter: drills without a cert count as the default track.
+  const dSel = $('d-cert');
+  const drillTracks = TRACKS.filter(t => DRILL_LIST.some(d => certOf(d) === t.id));
+  const pool = () => DRILL_LIST.filter(d => inTrack(d, dSel.value));
+  function fillDrillTracks(value) {
+    dSel.innerHTML = drillTracks.map(t => `<option value="${esc(t.id)}">${esc(t.label)} (${DRILL_LIST.filter(d => certOf(d) === t.id).length})</option>`).join('') +
+      `<option value="__all">${esc(trackName('__all'))} (${DRILL_LIST.length})</option>`;
+    dSel.value = value;
+    if (dSel.value !== value) dSel.value = drillTracks.length === 1 ? drillTracks[0].id : '__all';
+    $('drill-count').textContent = pool().length;
+  }
+  $('drill-pick').hidden = drillTracks.length < 2;
+  fillDrillTracks(S.get('track'));
+  dSel.addEventListener('change', () => { $('drill-count').textContent = pool().length; });
 
   function backToSetup() {
     $('drill-run').style.display = 'none';
@@ -1165,7 +1181,7 @@ const Drills = (function () {
       markAnswered(box, d.correct, picked);
       const ok = picked === d.correct;
       ex.style.display = '';
-      ex.innerHTML = `<div class="${ok ? 'pass' : 'fail'}" style="font-weight:700;margin-bottom:6px">${ok ? '✓ Correct' : '✗ Not quite — correct answer: ' + esc(d.options[d.correct])}</div><div>${esc(d.explanation)}</div>`;
+      ex.innerHTML = `<div class="${ok ? 'pass' : 'fail'}" style="font-weight:700;margin-bottom:6px">${ok ? '✓ Correct' : '✗ Not quite — correct answer: ' + esc(d.options[d.correct])}</div><div>${esc(d.explanation)}</div>${refLine(d)}`;
       ex.className = 'explain ' + (ok ? 'ok' : 'no');
       $('drill-next').style.display = '';
       $('drill-next').textContent = i === qs.length - 1 ? 'See results →' : 'Next →';
@@ -1199,7 +1215,7 @@ const Drills = (function () {
       return `<div class="review-item"><div class="rq">${ok ? '<span class="pass">✓ Correct</span>' : '<span class="fail">✗ Missed</span>'} · ${esc(d.duty || '')}</div>` +
         `<div class="drill-scenario" style="margin:8px 0">${esc(d.scenario)}</div>` +
         `<div class="ra">Your answer: <strong>${your}</strong><br>Correct answer: <strong class="pass">${esc(d.options[d.correct])}</strong></div>` +
-        `<div class="re">${esc(d.explanation)}</div></div>`;
+        `<div class="re">${esc(d.explanation)}${refLine(d)}</div></div>`;
     }).join('');
     releaseFocus();
     // history — same shape as quizzes/tests, so overview + cloud sync pick it up
@@ -1209,7 +1225,8 @@ const Drills = (function () {
     window.scrollTo(0, 0);
   }
   $('drill-start').addEventListener('click', () => {
-    qs = shuffle(DRILL_LIST); i = 0; answers = new Array(qs.length).fill(null);
+    qs = shuffle(pool()); i = 0; answers = new Array(qs.length).fill(null);
+    if (!qs.length) return;
     orders = qs.map(indexOrder);
     $('drill-setup').style.display = 'none';
     $('drill-results').style.display = 'none';
@@ -1232,7 +1249,7 @@ const Drills = (function () {
     const l = $('dr-review-list');
     l.style.display = l.style.display === 'none' ? '' : 'none';
   });
-  return {};
+  return { setTrack(tr) { fillDrillTracks(tr); } };
 })();
 
 /* ---------- endless adaptive mode ----------
@@ -1468,7 +1485,7 @@ const Endless = (function () {
       // only say "Level up/down" when the displayed level actually changes
       const note = after !== before ? `Level ${moved} → Lv ${after} · ${levelName()}`
         : `Lv ${after} · ${levelName()} — ${moved === 'up' ? (after >= 5 ? 'holding at the top' : 'climbing') : 'easing off'}`;
-      ex.innerHTML = `<div class="explain"><strong>${timedOut ? "⏱ Time's up." : (okFinal ? 'Correct.' : 'Not quite.')}</strong> ${esc(cur.explanation)}` +
+      ex.innerHTML = `<div class="explain"><strong>${timedOut ? "⏱ Time's up." : (okFinal ? 'Correct.' : 'Not quite.')}</strong> ${esc(cur.explanation)}${refLine(cur)}` +
         `<div class="small muted" style="margin-top:6px">${note}</div></div>`;
       ex.style.display = '';
       $('e-next').style.display = '';
@@ -1576,6 +1593,7 @@ S.onChange(key => {
     if (Quiz.setTrack) Quiz.setTrack(tr);
     if (PTest.setTrack) PTest.setTrack(tr);
     if (Endless.setTrack) Endless.setTrack(tr);
+    if (Drills.setTrack) Drills.setTrack(tr);
   }
   if ((all || key === 'quizLength') && Quiz.setCount) Quiz.setCount(S.get('quizLength'));
   if ((all || key === 'testLength' || key === 'testPace') && PTest.applyDefaults) PTest.applyDefaults();

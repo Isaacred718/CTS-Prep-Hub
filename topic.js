@@ -15,7 +15,7 @@ var TOPIC = {
 
   name: 'CTS Prep',
   title: 'CTS Prep — AVIXA CTS, CTS-D & CTS-I study app',
-  version: '6.0',
+  version: '6.2',
 
   // Default accent color: sky | violet | emerald | amber | rose | indigo.
   // People can pick their own in Settings; this is what a new visitor sees.

@@ -265,6 +265,10 @@ try {
     <div class="card" id="drill-setup">
       <h2>Scenario Drills</h2>
       <p class="muted small" id="drills-intro">Short scenarios that end in a decision, not isolated facts.</p>
+      <div class="track-pick" id="drill-pick">
+        <label class="f-label" for="d-cert" data-track-label>Certification</label>
+        <select id="d-cert"></select>
+      </div>
       <div class="stat-box"><div class="stat-val" id="drill-count"></div><div class="stat-lbl">drills</div></div>
       <div style="height:12px"></div>
       <button class="btn" id="drill-start">Start drill run</button>
@@ -416,6 +420,7 @@ try {
 <script src="data/drills.js" defer></script>
 <script src="forge.js" defer></script>
 <script src="data/forge.js" defer></script>
+<script src="data/ctsd-challenges.js" defer></script>
 <script src="settings.js" defer></script>
 <script src="app.js" defer></script>
 <script>

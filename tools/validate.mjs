@@ -25,7 +25,7 @@ const errors = [], warnings = [], notes = [];
 const err = m => errors.push(m), warn = m => warnings.push(m), note = m => notes.push(m);
 
 /* ---------- load ---------- */
-const FILES = ['topic.js', 'data/questions.js', 'data/cards.js', 'data/guides.js', 'data/drills.js', 'forge.js', 'data/forge.js'];
+const FILES = ['topic.js', 'data/questions.js', 'data/cards.js', 'data/guides.js', 'data/drills.js', 'forge.js', 'data/forge.js', 'data/ctsd-challenges.js'];
 let src = '';
 const toolRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 for (const f of FILES) {

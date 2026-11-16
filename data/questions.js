@@ -2831,12 +2831,12 @@ const QUESTIONS = [
     "q": "Your rack room design dissipates 8 kW of heat. Who must you coordinate with, and what do they need from you?",
     "options": [
       "The electrical engineer — the heat load in watts, so they can upsize the panel feeders",
-      "The mechanical (HVAC) engineer — the heat load in BTU/hr (W × 3.412) to size cooling",
+      "The mechanical (HVAC) engineer — the heat load in BTU/hr (W × 3.4) to size cooling",
       "The structural engineer — the rack weight and heat load so they can rate the floor",
       "No one — a rack room with vented doors and fans can shed 8 kW on its own"
     ],
     "correct": 1,
-    "explanation": "CTS-D Duty B Task 3: AV heat is a mechanical coordination item. Convert equipment power to BTU/hr (8,000 W × 3.412 ≈ 27,300 BTU/hr) and give the HVAC engineer the load plus any temperature limits, or the rack room becomes an oven."
+    "explanation": "CTS-D Duty B Task 3: AV heat is a mechanical coordination item. Convert equipment power to BTU/hr with the formula sheet's factor (8,000 W × 3.4 = 27,200 BTU/hr) and give the HVAC engineer the load plus any temperature limits, or the rack room becomes an oven."
   },
   {
     "domain": "CTS-D: Allied Trade Coordination",
@@ -3492,11 +3492,12 @@ const QUESTIONS = [
     "options": [
       "1.5 Gbps",
       "6 Gbps",
-      "18 Gbps",
+      "About 15 Gbps",
       "48 Gbps"
     ],
     "correct": 2,
-    "explanation": "3840×2160 × 60 fps × 24 bits (8-bit × 3 channels) ≈ 11.9 Gbps for 4:2:0... precisely: 4K60 8-bit 4:4:4 ≈ 17.8 Gbps — hence HDMI 2.0's 18 Gbps ceiling. This is why uncompressed 4K60 distribution needs fiber or 10G+ AV-over-IP."
+    "explanation": "The CTS-D formula sheet gives R = H × V × C × 1.25 × FPS × 3 = 3840 × 2160 × 8 × 1.25 × 60 × 3 ≈ 14.9 Gbps. The active pixels alone are about 11.9 Gbps; on HDMI 2.0, blanking and TMDS encoding push the link to about 17.8 of its 18 Gbps. Either way, uncompressed 4K60 needs more than a 10 Gbps link.",
+    "ref": "AVIXA CTS-D formula sheet (2024), Digital Video Data Rate"
   },
   {
     "domain": "CTS-D: Design Calculations",
@@ -3521,12 +3522,12 @@ const QUESTIONS = [
     "q": "An AV rack's equipment draws 2,500 watts continuously. What cooling load must the HVAC design handle for this rack?",
     "options": [
       "Approximately 2,500 BTU/hr (1 watt = 1 BTU/hr)",
-      "Approximately 8,530 BTU/hr (watts × 3.412)",
-      "Approximately 733 BTU/hr (watts ÷ 3.412)",
+      "Approximately 8,500 BTU/hr (watts × 3.4)",
+      "Approximately 735 BTU/hr (watts ÷ 3.4)",
       "None; rack fans exhaust the heat to the room"
     ],
     "correct": 1,
-    "explanation": "Essentially all consumed electrical power becomes heat: BTU/hr = watts × 3.412. 2,500 × 3.412 ≈ 8,530 BTU/hr — roughly 0.7 tons of cooling. The designer gives this number to the mechanical engineer."
+    "explanation": "Essentially all consumed electrical power becomes heat. The CTS-D formula sheet uses BTU/hr = watts × 3.4 (the exact factor is 3.412): 2,500 × 3.4 = 8,500 BTU/hr, roughly 0.7 tons of cooling. The designer gives this number to the mechanical engineer."
   },
   {
     "domain": "CTS-D: Design Calculations",
@@ -3683,15 +3684,16 @@ const QUESTIONS = [
     "cert": "CTS-D",
     "duty": "C",
     "task": "C1",
-    "q": "A 70V distributed system has 12 ceiling speakers tapped at 7.5W each. What is the minimum amplifier size, following the 20% headroom practice?",
+    "q": "A 70V distributed system has 12 ceiling speakers tapped at 7.5W each. Using the CTS-D formula sheet, what is the minimum amplifier size?",
     "options": [
-      "Exactly 90W (12 × 7.5) — no headroom is needed on 70V systems",
-      "At least ~110W (12 × 7.5 = 90W, plus 20% headroom ≈ 108W)",
-      "1000W (apply a 10× safety multiplier to the 90W tap total for commercial jobs)",
-      "7.5W — size the amp to one speaker tap, since only one tap draws power at a time"
+      "Exactly 90W (12 × 7.5), since 70V systems need no headroom",
+      "About 108W (12 × 7.5 = 90W, plus 20 percent headroom)",
+      "135W (12 × 7.5 × 1.5, which adds 50 percent headroom)",
+      "7.5W, since only one speaker tap draws power at a time"
     ],
-    "correct": 1,
-    "explanation": "Sum the taps (90W) and add headroom so the amp never clips on peaks: 90 × 1.2 = 108W → specify the next standard size up (120W). An amp sized exactly to the tap total will clip on transients."
+    "correct": 2,
+    "explanation": "The formula sheet sizes a constant-voltage amplifier as Wt = W × N × 1.5, where 1.5 is 50 percent headroom: 7.5 × 12 × 1.5 = 135W. Specify the next standard size at or above that. 108W uses a 20 percent rule of thumb that the exam formula does not use, and an amp sized to the bare 90W tap total will clip on peaks.",
+    "ref": "AVIXA CTS-D formula sheet (2024), Power Amplifier Wattage (Constant Voltage)"
   },
   {
     "domain": "CTS-D: Design Calculations",

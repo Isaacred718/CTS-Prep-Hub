@@ -12,15 +12,14 @@ for any other subject. See **[TEMPLATE.md](TEMPLATE.md)**.
 
 | Content | Count |
 |---|---|
-| Questions, every one with a full explanation | **530** |
+| Questions, every one with a full explanation | **685** |
 | — CTS | 272 |
-| — CTS-D (design) | 134 |
+| — CTS-D (design) | 289 |
 | — CTS-I (installation) | 124 |
-| — CTS-I (installation) | 103 |
 | Flashcards (Leitner spaced repetition) | 131 |
 | Study guides (incl. the Exam Cram quick reference) | 7 |
-| Scenario drills | 24 |
-| Question generators for Endless mode | 40 (CTS) |
+| Scenario drills | 40 |
+| Question generators for Endless mode | 104 (40 CTS, 37 CTS-D, 27 CTS-I) |
 
 **29 domains** across three certifications:
 
@@ -169,7 +168,9 @@ data/
   questions.js    530 questions: { domain, cert, duty, task, q, options[4], correct, explanation }
   cards.js        131 flashcards: { domain, front, back }
   guides.js       7 guides: { title, domain, body }
-  drills.js       24 drills: { duty, task, scenario, question, options, correct, explanation }
+  drills.js       24 CTS drills: { duty, task, scenario, question, options, correct, explanation }
+  ctsd-challenges.js  155 CTS-D questions, 16 CTS-D drills and 16 formula-sheet generators;
+                  items carry diff (1-5) and ref (CTS-D Exam Guide chapter/section)
   forge.js        CTS generators: calculations, concept tables, trick tables
 template/         starter topic for new apps (astronomy sample)
 tools/

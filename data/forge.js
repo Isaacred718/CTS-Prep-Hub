@@ -567,14 +567,14 @@
     };
   });
 
-  // Max viewing distance = 4x screen height for detailed content (AVIXA DISCAS)
+  // Max viewing distance by the older 4-6-8 rule of thumb (DISCAS is the exam method)
   F.calc('ctsd-view-dist', 'CTS-D: Design Calculations', 'CTS-D', 2, () => {
     const h = R(4, 10), ans = 4 * h;
     const o = mkOptions(`${ans} ft`, [`${2 * h} ft`, `${6 * h} ft`, `${8 * h} ft`, `${10 * h} ft`]);
     return {
-      q: `A video wall is ${h} feet tall and will display detailed spreadsheets. What is the maximum recommended viewing distance for the farthest seat?`,
+      q: `A video wall is ${h} feet tall and will display detailed spreadsheets. Using the older "4-6-8" rule of thumb, what is the maximum viewing distance for the farthest seat?`,
       ...o,
-      explanation: `AVIXA DISCAS: detailed content (spreadsheets) stays legible to about 4 times the image height: 4 x ${h} ft = ${ans} ft.`
+      explanation: `The 4-6-8 rule of thumb puts the farthest viewer of detailed content at about 4 times the image height: 4 x ${h} ft = ${ans} ft. On the CTS-D exam, use DISCAS (ANSI/AVIXA V202.01) instead, which works from element height: for basic decision making, farthest viewer = 200 x element height.`
     };
   });
 
@@ -605,7 +605,7 @@
       `1:${fmt(ratio, 1)}`, `${white - black}:1`, `${white + black}:1`, `${fmt(white / (black + 1), 1)}:1`
     ]);
     return {
-      q: `A display measures ${white} lux on full white and ${black} lux on full black. What is its contrast ratio?`,
+      q: `A display measures ${white} cd/m² on full white and ${black} cd/m² on full black. What is its contrast ratio?`,
       ...o,
       explanation: `Contrast ratio = white luminance / black luminance = ${white} / ${black} = ${fmt(ratio, 1)}:1.`
     };
